@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  forgelab-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8004:8004"
+    environment:
+      - DEFAULT_STORAGE_ROOT=/data/forgelab
+    volumes:
+      - forgelab-storage:/data/forgelab
+
+  forgelab-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8004
+    depends_on:
+      - forgelab-backend
+
+volumes:
+  forgelab-storage:
